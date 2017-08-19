@@ -1,3 +1,5 @@
+**Update 8/19/17:** Scripts have been removed from this post. Instead they are available at [this repo](https://github.com/rucker/multi-firefox-mac).
+
 # Running Multiple Firefox Profiles on MacOS
 I have a use-case where it makes sense to run two Firefox profiles concurrently on MacOS. Furthermore, I want to be able to launch each of them via Spotlight rather than running a script by hand.
 
@@ -12,18 +14,7 @@ I have two complete Firefox application directories -- each containing a unique 
 
 ## Setup
 - Copy your existing Firefox.app directory and give it a name that suits you (see my example above). Later on, you can always create a new profile in the second Firefox directory using the [Profile Manager](http://kb.mozillazine.org/Profile_Manager)
-- Add the following script to each directory and name it firefox.sh:  
-
-```
-#!/bin/bash
-
-PROFILE_NAME=your-profile-name-here
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-"$DIR/firefox-bin" --no-remote -P $PROFILE_NAME
-```
-- `$ cp firefox firefox.bak`
-- `$ mv firefox firefox-bin`
-- `$ cp firefox.sh firefox`
+- **Edit 8/19/17:** Manual setup instructions removed. Instead, clone [this repository](https://github.com/rucker/multi-firefox-mac) and run `fix-the-fox.sh` to do some further setup. This will replace each `firefox` binary with a small shell script that will run Firefox with `--no-remote` and the appropriate profile name.
 
 What happens when the application is launched through Spotlight is `firefox` (the shell script) is invoked. It then calls the actual firefox binary, `firefox-bin`, with the absolute directory path prepended.
 
@@ -32,17 +23,6 @@ Because each profile is contained in its own Firefox application directory, Spot
 ![]({{ site.url }}/assets/multi-firefox.png)
 
 ## Firefox Updates
-One caveat to bear in mind is that each time Firefox receives an update, your `firefox` script will be replaced by the new version of the Firefox binary. This means a little maintenance is required after each update. The following script should take care of that:
+One caveat to bear in mind is that each time Firefox receives an update, your `firefox` script will be replaced by the new version of the Firefox binary. This means a little maintenance is required after each update. `fix-the-fox.sh` will handle that for you.
 
-```
-#!/bin/bash
-
-FIREFOX_DIRS=(profile-dir-1 profile-dir-2)
-for dir in ${FIREFOX_DIRS[@]}; do
-  cd $dir
-  cp firefox firefox.bak
-  mv firefox firefox-bin
-  cp firefox.sh firefox
-done
-```
 Happy browsing!
